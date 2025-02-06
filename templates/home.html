@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Create New Item</h2>
+    <form method="POST" action="{{ url_for('create') }}">
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" rows="4" required></textarea>
+        </div>
+        <button type="submit">Create Item</button>
+    </form>
+
+    <div class="item-list">
+        <h2>Existing Items</h2>
+        {% if items %}
+            {% for item in items %}
+                <div class="item">
+                    <h3><a href="{{ url_for('view_item', item_id=item.id) }}">{{ item.name }}</a></h3>
+                    <p>{{ item.description[:100] }}{% if item.description|length > 100 %}...{% endif %}</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No items yet.</p>
+        {% endif %}
+    </div>
+{% endblock %}
