@@ -28,4 +28,4 @@ handlers:
   script: auto
 
 env_variables:
-  GOOGLE_CLOUD_PROJECT: "software-engineering-2024"
+  GOOGLE_CLOUD_PROJECT: "jaden-webpage"

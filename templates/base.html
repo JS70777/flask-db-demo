@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{% block title %}Item Manager{% endblock %}</title>
+    <title>{% block title %}Quote Manager{% endblock %}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -21,19 +21,25 @@
             padding: 8px;
             margin-bottom: 10px;
         }
-        .item-list {
+        .quote-list {
             margin-top: 20px;
         }
-        .item {
+        .quote {
             border: 1px solid #ddd;
             padding: 10px;
             margin-bottom: 10px;
             border-radius: 4px;
         }
+        textarea {
+            font-family: Arial, sans-serif;
+        }
+        .content {
+            font-size: larger;
+        }
     </style>
 </head>
 <body>
-    <h1><a href="/">Item Manager</a></h1>
+    <h1><a href="/">Quote Manager</a></h1>
     {% block content %}{% endblock %}
 </body>
 </html>
