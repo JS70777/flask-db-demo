@@ -1,0 +1,8 @@
+{% include "view_quote.html" %}
+
+<h1>{{by_quotes}}</h1>
+
+
+{% for quote in by_quotes %}
+{% block content %} {{ super() }} {% endblock content %}
+{% endfor %}

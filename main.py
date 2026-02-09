@@ -1,3 +1,5 @@
+from unicodedata import name
+
 from flask import Flask, request, jsonify, render_template, redirect, url_for
 from google.cloud import datastore
 
@@ -52,6 +54,27 @@ def view_quote(quote_id):
     quote = dict(entity)
     quote['id'] = entity.key.id
     return render_template('view_quote.html', quote=quote)
+
+@app.route('/delete/<int:quote_id>')
+def delete_quote(quote_id):
+    """Delete quote"""
+    key = datastore_client.key('Quote', quote_id)
+    entity = datastore_client.get(key)
+    if not entity:
+        return "Quote not found", 404
+    datastore_client.delete(entity)
+    return redirect(url_for('home'))
+
+@app.route('/view-person/<string:person>')
+def view_type(person):
+    by_quotes = datastore_client.query(kind='Quote')
+    # by_quotes.order = ["-created"]
+    by_quotes.add_filter(filter=datastore.query.PropertyFilter("name", "=", person))
+    by_quotes = list(by_quotes.fetch())
+    # from_quotes = list(datastore_client.query(
+    #     kind='Quote', submitter='person', max_results=10, order='-created').fetch())
+    return render_template('view_by.html', by_quotes=by_quotes)
+    # return render_template('view_by.html', person=person, by_quotes=by_quotes)
 
 if __name__ == "__main__":
     # This is used when running locally only. When deploying to Google App
