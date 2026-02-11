@@ -1,5 +1,4 @@
-from unicodedata import name
-
+import datetime
 from flask import Flask, request, jsonify, render_template, redirect, url_for
 from google.cloud import datastore
 
@@ -11,13 +10,13 @@ def home():
     """Display homepage with form and list of quotes"""
     # Query all quotes
     query = datastore_client.query(kind='Quote')
+    query.order = ["-timestamp"]
     quotes = []
     for entity in query.fetch():
         quote = dict(entity)
         quote['id'] = entity.key.id
         quotes.append(quote)
     return render_template('home.html', quotes=quotes)
-
 
 @app.route('/create', methods=['POST'])
 def create():
@@ -26,6 +25,7 @@ def create():
         name = request.form.get('name')
         quote = request.form.get('quote')
         submitter = request.form.get('submitter')
+        timestamp = datetime.datetime.now()
 
         # Create new entity
         key = datastore_client.key('Quote')
@@ -33,7 +33,8 @@ def create():
         entity.update({
             'name': name,
             'quote': quote,
-            'submitter': submitter
+            'submitter': submitter,
+            'timestamp': timestamp
         })
         datastore_client.put(entity)
 
@@ -41,39 +42,41 @@ def create():
     except Exception as e:
         return f"Error: {str(e)}", 500
 
-
 @app.route('/view/<int:quote_id>')
 def view_quote(quote_id):
     """Display individual quote page"""
     key = datastore_client.key('Quote', quote_id)
     entity = datastore_client.get(key)
-
     if not entity:
-        return "Quote not found", 404
-
+        return render_template('error_404.html')
     quote = dict(entity)
     quote['id'] = entity.key.id
     return render_template('view_quote.html', quote=quote)
 
-@app.route('/delete/<int:quote_id>')
+@app.route('/Deal->eat/<int:quote_id>')
 def delete_quote(quote_id):
     """Delete quote"""
     key = datastore_client.key('Quote', quote_id)
     entity = datastore_client.get(key)
     if not entity:
-        return "Quote not found", 404
+        return render_template('error_404.html')
     datastore_client.delete(entity)
     return redirect(url_for('home'))
 
 @app.route('/view-person/<string:person>')
 def view_type(person):
     by_quotes = datastore_client.query(kind='Quote')
-    # by_quotes.order = ["-created"]
+    by_quotes.order = ["-timestamp"]
+    from_quotes = by_quotes
+
     by_quotes.add_filter(filter=datastore.query.PropertyFilter("name", "=", person))
-    by_quotes = list(by_quotes.fetch())
-    # from_quotes = list(datastore_client.query(
-    #     kind='Quote', submitter='person', max_results=10, order='-created').fetch())
-    return render_template('view_by.html', by_quotes=by_quotes)
+    by_quotes_list = list(by_quotes.fetch())
+
+    from_quotes.add_filter(filter=datastore.query.PropertyFilter("submitter", "=", person))
+    from_quotes_list = list(from_quotes.fetch())
+
+    return render_template('view_by.html', person=person,
+                           by_quotes=by_quotes_list, from_quotes=from_quotes_list)
     # return render_template('view_by.html', person=person, by_quotes=by_quotes)
 
 if __name__ == "__main__":

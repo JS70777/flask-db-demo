@@ -1,8 +1,16 @@
-{% include "view_quote.html" %}
+{% extends "base.html" %}
 
-<h1>{{by_quotes}}</h1>
-
-
-{% for quote in by_quotes %}
-{% block content %} {{ super() }} {% endblock content %}
-{% endfor %}
+{% block content %}
+    <div>
+        <h3>Quotes by {{ person }}:</h3>
+        {% for quote in by_quotes %}
+            {% include "quote_block.html" %}
+        {% endfor %}
+    </div>
+    <div>
+        <h3>Quotes submitted by {{ person }}:</h3>
+        {% for quote in from_quotes %}
+            {% include "quote_block.html" %}
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,0 +1,13 @@
+indexes:
+- kind: Quote
+  properties:
+  - name: name
+  - name: timestamp
+    direction: desc
+
+# The new index for the 'submitter' query
+- kind: Quote
+  properties:
+  - name: submitter
+  - name: timestamp
+    direction: desc

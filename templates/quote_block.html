@@ -1,0 +1,7 @@
+<div class="quote">
+    <p class="content">
+        {% if quote.quote[0]=='"' %}{{ quote.quote }}{% else %}"{{ quote.quote }}"{% endif %}
+        - <i>{{ quote.name }}</i>
+    </p>
+    <p>Submitted by: {{quote.submitter}}</p>
+</div>
