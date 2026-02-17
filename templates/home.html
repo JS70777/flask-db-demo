@@ -18,23 +18,21 @@
         <button type="submit">Submit Quote</button>
     </form>
 
-    <div class="quote-list">
-        <h2>Existing Quotes</h2>
-        {% if quotes %}
-            {% for quote in quotes %}
-                <div class="quote">
-                    <h3><a href="{{ url_for('view_quote', quote_id=quote.id) }}">
-                        {% if quote.quote[0]=='"' %}
-                        {{ quote.quote[:100] }}{% if quote.quote|length > 100 %}...{% endif %}
-                        {% else %}
-                        "{{ quote.quote[:100] }}{% if quote.quote|length > 100 %}...{% endif %}"
-                        {% endif %}
-                    </a></h3>
-                    <p>-{{ quote.name }}</p>
-                </div>
-            {% endfor %}
-        {% else %}
-            <p>No quotes yet.</p>
-        {% endif %}
-    </div>
+    <h2><a href="/quotes">View all quotes</a></h2>
+
+    <h2>
+        <label>
+            <a id="person_link" href="">View quotes said or submitted by a person (below)</a>
+            <input type='text' id="person" name="person" placeholder="Enter name">
+            <script>
+                const person = document.getElementById('person');
+                const link = document.getElementById('person_link');
+                person.addEventListener('input', () => {
+                    // Customize your base URL here
+                    link.href = "/view-person/" + person.value;
+                });
+            </script>
+        </label>
+
+    </h2>
 {% endblock %}

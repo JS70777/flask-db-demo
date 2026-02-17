@@ -1,16 +1,20 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div>
-        <h3>Quotes by {{ person }}:</h3>
-        {% for quote in by_quotes %}
-            {% include "quote_block.html" %}
-        {% endfor %}
-    </div>
-    <div>
-        <h3>Quotes submitted by {{ person }}:</h3>
-        {% for quote in from_quotes %}
-            {% include "quote_block.html" %}
-        {% endfor %}
-    </div>
+    {% if by_quotes | length != 0 %}
+        <div>
+            <h3>Quotes by {{ person }}:</h3>
+            {% for quote in by_quotes %}
+                {% include "quote_block.html" %}
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% if from_quotes | length != 0 %}
+        <div>
+            <h3>Quotes submitted by {{ person }}:</h3>
+            {% for quote in from_quotes %}
+                {% include "quote_block.html" %}
+            {% endfor %}
+        </div>
+    {% endif %}
 {% endblock %}

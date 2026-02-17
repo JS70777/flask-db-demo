@@ -16,13 +16,13 @@ def home():
         quote = dict(entity)
         quote['id'] = entity.key.id
         quotes.append(quote)
-    return render_template('home.html', quotes=quotes)
+    return render_template('home.html')
 
 @app.route('/create', methods=['POST'])
 def create():
     """Handle form submission to create new quote"""
     try:
-        name = request.form.get('name')
+        name = request.form.get('name').title()
         quote = request.form.get('quote')
         submitter = request.form.get('submitter')
         timestamp = datetime.datetime.now()
@@ -34,7 +34,8 @@ def create():
             'name': name,
             'quote': quote,
             'submitter': submitter,
-            'timestamp': timestamp
+            'timestamp': timestamp,
+            'likes': 0
         })
         datastore_client.put(entity)
 
@@ -48,7 +49,7 @@ def view_quote(quote_id):
     key = datastore_client.key('Quote', quote_id)
     entity = datastore_client.get(key)
     if not entity:
-        return render_template('error_404.html')
+        return render_template('error_404.html', item='Quote')
     quote = dict(entity)
     quote['id'] = entity.key.id
     return render_template('view_quote.html', quote=quote)
@@ -59,25 +60,42 @@ def delete_quote(quote_id):
     key = datastore_client.key('Quote', quote_id)
     entity = datastore_client.get(key)
     if not entity:
-        return render_template('error_404.html')
+        return render_template('error_404.html', item='Quote')
     datastore_client.delete(entity)
     return redirect(url_for('home'))
 
 @app.route('/view-person/<string:person>')
 def view_type(person):
+    person = person.title()
+
     by_quotes = datastore_client.query(kind='Quote')
     by_quotes.order = ["-timestamp"]
-    from_quotes = by_quotes
 
     by_quotes.add_filter(filter=datastore.query.PropertyFilter("name", "=", person))
     by_quotes_list = list(by_quotes.fetch())
 
+    from_quotes = datastore_client.query(kind='Quote')
     from_quotes.add_filter(filter=datastore.query.PropertyFilter("submitter", "=", person))
     from_quotes_list = list(from_quotes.fetch())
 
+    if len(by_quotes_list) == 0 and len(from_quotes_list) == 0:
+        return render_template('error_404.html', item='Person')
+
     return render_template('view_by.html', person=person,
                            by_quotes=by_quotes_list, from_quotes=from_quotes_list)
-    # return render_template('view_by.html', person=person, by_quotes=by_quotes)
+
+@app.route('/quotes')
+def quotes():
+    filter = request.args.get('filter')
+    args = ['timestamp', 'name', 'submitter', 'likes']
+    if not args.__contains__(filter) and not args.__contains__(filter[1:]):
+        filter = '-timestamp'
+
+    qs = datastore_client.query(kind='Quote')
+    qs.order = [filter]
+    qs = list(qs.fetch())
+
+    return render_template('quote_list.html', quotes=qs, filter=filter)
 
 if __name__ == "__main__":
     # This is used when running locally only. When deploying to Google App
