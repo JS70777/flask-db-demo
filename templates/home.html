@@ -22,17 +22,24 @@
 
     <h2>
         <label>
-            <a id="person_link" href="">View quotes said or submitted by a person (below)</a>
+            <a id="person_link" href="">View quotes said or submitted by a person &#10132;</a>
             <input type='text' id="person" name="person" placeholder="Enter name">
             <script>
                 const person = document.getElementById('person');
                 const link = document.getElementById('person_link');
-                person.addEventListener('input', () => {
+
+                person.addEventListener("input", () => {
                     // Customize your base URL here
                     link.href = "/view-person/" + person.value;
                 });
+                person.addEventListener("keydown", function (event) {
+                    if (event.key === "enter") {
+                        event.preventDefault();
+                        person.setAttribute("font-size", "100px");
+                        window.location.href = "/view-person/" + person.value;
+                    }
+                });
             </script>
         </label>
-
     </h2>
 {% endblock %}

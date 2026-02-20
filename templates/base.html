@@ -2,41 +2,7 @@
 <html>
 <head>
     <title>{% block title %}Quote Manager{% endblock %}</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        input[type="text"], textarea {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-        }
-        .quote-list {
-            margin-top: 20px;
-        }
-        .quote {
-            border: 1px solid #ddd;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 4px;
-        }
-        textarea {
-            font-family: Arial, sans-serif;
-        }
-        .content {
-            font-size: larger;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
     <body>
         <h1><a href="/">Quote Manager</a></h1>

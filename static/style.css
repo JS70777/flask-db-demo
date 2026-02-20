@@ -1,0 +1,160 @@
+:root {
+    /* High-contrast base */
+    --light-bg: #F2F2F2;
+    --card-bg: #FFFFFF;
+    --border-color: #9A989A;
+    --frc-blue: #0066B3;
+    --frc-red: #ED1C24;
+    --text-dark: #003366;
+}
+/* Standard and visited links use the same color */
+a, a:visited {
+    color: var(--frc-blue); /* Replace with #0066B3 or your preferred hex */
+    /*text-decoration: none;      !* Optional: removes the default underline *!*/
+}
+/* Optional: change color when hovering to show it's still interactive */
+a:hover {
+    color: var(--frc-red);
+    text-decoration: underline;
+}
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--light-bg);
+    color: var(--text-dark);
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    line-height: 1.6;
+}
+h1 {
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border-left: 5px solid var(--frc-blue);
+    padding-left: 15px;
+    margin-bottom: 30px;
+}
+h2 {
+    color: var(--frc-blue);
+    font-size: 1.7rem;
+    text-transform: uppercase; /* FRC style headers are almost always caps */
+    letter-spacing: 1px;
+    border-bottom: 4px solid var(--frc-red);
+    padding-bottom: 5px;
+    margin-top: 30px;
+}
+/* Form Styling */
+.form-group {
+    margin-bottom: 15px;
+}
+form {
+    background: var(--card-bg);
+    padding: 25px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+}
+label {
+    font-weight: bold;
+    color: var(--frc-blue);
+    text-transform: math-auto;
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+    display: block;
+}
+input[type="text"], textarea {
+    background: var(--light-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    color: #231f20;
+    padding: 12px;
+    transition: border-color 0.3s ease;
+    width: 95%;
+}
+/* Style the placeholder specifically */
+input::placeholder, textarea::placeholder {
+    color: #9a989a;            /* FRC Gray makes it clearly non-typed text */
+    opacity: 1;                 /* Ensures the color shows correctly in all browsers */
+}
+input[type="text"]:focus, textarea:focus {
+    outline: none;
+    border-color: var(--frc-red);
+    box-shadow: 0 0 8px rgba(234, 87, 46, 0.3);
+}
+/* Quote List Grid */
+.quote-list {
+    margin-top: 40px;
+    display: flex;          /* Switches from grid to flexbox */
+    flex-direction: column; /* Stacks items vertically */
+    gap: 25px;              /* Adds consistent spacing between cards */
+    max-width: 1000px;       /* Keeps the cards from getting too wide on desktop */
+    margin-left: auto;      /* Centers the entire list */
+    margin-right: auto;     /* Centers the entire list */
+}
+.quote {
+    background: var(--card-bg);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    position: relative;
+    transition: transform 0.2s ease;
+    padding: 40px 20px 5px 20px; /* Top padding increased to make room for the symbol */
+    /* FIX 1: Ensure cards grow with content */
+    height: auto;
+    min-height: 130px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.quote:hover {
+    transform: translateY(-5px);
+    border-color: var(--frc-blue);
+}
+/* Big stylized quotation marks */
+.quote::before {
+    content: '“';
+    position: absolute;
+    top: 5px;
+    left: 15px;
+    font-size: 60px;
+    color: var(--frc-blue);
+    opacity: 0.3;
+    font-family: Georgia, serif; /* Serifs look better for quotes */
+    line-height: 1;
+}
+textarea {
+    font-family: Arial, sans-serif;
+}
+.content {
+    font-size: 1.1rem;
+    font-style: italic;
+    margin-bottom: 20px;
+    position: relative;
+    word-wrap: break-word; /* Prevents long strings from breaking the layout */
+    z-index: 1;
+    line-height: 1.6;
+}
+.author {
+    text-align: right;
+    font-weight: bold;
+    color: var(--frc-red);
+    font-family: 'Courier New', monospace; /* Tech/Terminal feel */
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 1rem;
+    border-top: 1px solid var(--border-color);
+    padding-top: 10px;
+}
+button {
+    background: linear-gradient(45deg, var(--frc-blue), #0066ff);
+    color: #f8f9fa;
+    font-weight: 800;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+}
+button:hover {
+    background: var(--frc-red);
+    box-shadow: 0 0 20px rgba(255, 107, 0, 0.6);
+}

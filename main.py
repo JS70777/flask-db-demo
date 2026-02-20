@@ -88,7 +88,7 @@ def view_type(person):
 def quotes():
     filter = request.args.get('filter')
     args = ['timestamp', 'name', 'submitter', 'likes']
-    if not args.__contains__(filter) and not args.__contains__(filter[1:]):
+    if filter is None or (not args.__contains__(filter) and not args.__contains__(filter[1:])):
         filter = '-timestamp'
 
     qs = datastore_client.query(kind='Quote')
@@ -96,6 +96,22 @@ def quotes():
     qs = list(qs.fetch())
 
     return render_template('quote_list.html', quotes=qs, filter=filter)
+
+@app.route('/like/<int:quote_id>')
+def like(quote_id):
+    # 1. Create a key for the existing entity
+    key = datastore_client.key('Quote', quote_id)
+    # 2. Use a transaction for safe updating
+    with datastore_client.transaction():
+        # Fetch the current entity
+        quote = datastore_client.get(key)
+        if not quote:
+            return render_template('error_404.html', item='Quote')
+        # 3. Modify specific properties from form or JSON data
+        quote['likes'] += 1
+        # 4. Save the modified entity back to Datastore
+        datastore_client.put(quote)
+    return redirect(url_for('view_quote', quote_id=quote_id))
 
 if __name__ == "__main__":
     # This is used when running locally only. When deploying to Google App

@@ -5,7 +5,7 @@
         <div>
             <h3>Quotes by {{ person }}:</h3>
             {% for quote in by_quotes %}
-                {% include "quote_block.html" %}
+                {% with q=quote %}{% include "quote_block.html" %}{% endwith %}
             {% endfor %}
         </div>
     {% endif %}
@@ -13,7 +13,7 @@
         <div>
             <h3>Quotes submitted by {{ person }}:</h3>
             {% for quote in from_quotes %}
-                {% include "quote_block.html" %}
+                {% with q=quote %}{% include "quote_block.html" %}{% endwith %}
             {% endfor %}
         </div>
     {% endif %}

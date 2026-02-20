@@ -1,7 +1,9 @@
 <div class="quote">
     <p class="content">
-        {% if quote.quote[0]=='"' %}{{ quote.quote }}{% else %}"{{ quote.quote }}"{% endif %}
-        - <i>{{ quote.name }}</i>
+        <a href={{"/view/" ~ q.id}}>
+            {{ q.quote if q.quote[0] == '"' else ("\"" ~ q.quote ~ "\"") }}
+        </a>
+        - <i>{{ q.name }}</i>
     </p>
-    <p>Submitted by: {{quote.submitter}}</p>
+    <p class="author">Submitted by: {{quote.submitter}}</p>
 </div>
